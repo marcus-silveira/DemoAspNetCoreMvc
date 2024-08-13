@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 namespace Demo.Extensions;
 
 [HtmlTargetElement("*", Attributes = "type-button, route-id")]
-public class ButtonTagHelper(IHttpContextAccessor contextAccessor) : TagHelper
+public class ButtonTagHelper(IHttpContextAccessor contextAccessor, LinkGenerator linkGenerator) : TagHelper
 {
     [HtmlAttributeName("type-button")]
     public TypeButton TypeButton { get; set; }
@@ -42,9 +42,14 @@ public class ButtonTagHelper(IHttpContextAccessor contextAccessor) : TagHelper
         
         var controller = contextAccessor.HttpContext?.GetRouteData().Values["controller"]?.ToString();
 
+        var host = $"{contextAccessor.HttpContext.Request.Scheme}://" +
+                   $"{contextAccessor.HttpContext.Request.Host.Value}";
+        
+        var indexPath = linkGenerator.GetPathByAction(contextAccessor.HttpContext, _actionName, controller,
+            values: new { id = RouteId })!;
         
         output.TagName = "a";
-        output.Attributes.SetAttribute("href", $"{controller}/{_actionName}/{RouteId}");
+        output.Attributes.SetAttribute("href", $"{host}{indexPath}");
         output.Attributes.SetAttribute("class", _className);
         
         var span = new TagBuilder("span");

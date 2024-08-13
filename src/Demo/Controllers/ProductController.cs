@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Controllers;
 
+[Route("meus-produtos")]
 public class ProductController(AppDbContext context) : Controller
 {
     public async Task<IActionResult> Index()
@@ -12,6 +13,7 @@ public class ProductController(AppDbContext context) : Controller
         return View(await context.Products.ToListAsync());
     }
 
+    [Route("detalhes/{id}")]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null) return NotFound();
@@ -22,13 +24,14 @@ public class ProductController(AppDbContext context) : Controller
 
         return View(product);
     }
-
+    
+    [Route("criar-novo")]
     public IActionResult Create()
     {
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("criar-novo")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name,Description,Image,Price")] Product product)
     {
@@ -38,6 +41,7 @@ public class ProductController(AppDbContext context) : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Route("editar/{id}")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -47,7 +51,7 @@ public class ProductController(AppDbContext context) : Controller
         return View(product);
     }
 
-    [HttpPost]
+    [HttpPost("editar/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Image,Price")] Product product)
     {
@@ -68,8 +72,8 @@ public class ProductController(AppDbContext context) : Controller
 
         return RedirectToAction(nameof(Index));
     }
-
-    // GET: Product/Delete/5
+    
+    [Route("deletar/{id}")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
@@ -81,7 +85,7 @@ public class ProductController(AppDbContext context) : Controller
         return View(product);
     }
 
-    [HttpPost]
+    [HttpPost("deletar/{id}")]
     [ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
