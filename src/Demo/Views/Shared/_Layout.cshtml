@@ -2,14 +2,15 @@
 <html lang="pt-BR">
 <head>
     <title>@ViewData["Title"] - Demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"/>
+        <link rel="stylesheet" href="~/css/site.css"/>
     </environment>
 
     <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/site.min.css" />
+        <link rel="stylesheet" href="~/css/site.min.css"/>
     </environment>
 
 </head>
@@ -23,6 +24,9 @@
                 <ul class="navbar-nav flex-grow-1">
                     <li class="nav-item">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index">Products</a>
                     </li>
                 </ul>
             </div>
@@ -43,14 +47,18 @@
 </footer>
 
 <environment include="Development">
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="~/js/site.js"></script>
     <script src="~/js/cep.js"></script>
 </environment>
 
 <environment exclude="Development">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.min.js"></script>
 </environment>
+@await RenderSectionAsync("Scripts", false)
+
 </body>
 </html>

@@ -1,0 +1,65 @@
+@model IEnumerable<Demo.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <img src="/images/@item.Image" style="height: 100px; width: 61px" alt=""/>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                <CustomButton type-button="Details" route-id="@item.Id"></CustomButton>
+                <CustomButton type-button="Edit" route-id="@item.Id"></CustomButton>
+                <CustomButton type-button="Delete" route-id="@item.Id"></CustomButton>
+                @* <button button="Detalhes" route-id="@item.Id"></button> *@
+                @* <button button="Editar" route-id="@item.Id"></button> *@
+                @* <button button="Excluir" route-id="@item.Id"></button> *@
+
+                @* <a asp-action="Details" class="btn btn-info" asp-route-id="@item.Id"><spam class="fa fa-search"></spam> *@
+                @* </a> *@
+                @*     <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.Id"><spam class="fa fa-pencil-alt"></spam></a> *@
+                @*     <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.Id"><spam class="fa fa-trash"></spam></a> *@
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<vc:counter model-counter="@Model.Count()"></vc:counter>
+@* @await Component.InvokeAsync("Counter", new { modelCounter = Model.Count() }) *@
