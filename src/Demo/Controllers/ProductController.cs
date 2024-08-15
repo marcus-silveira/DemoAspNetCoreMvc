@@ -1,4 +1,5 @@
 using Demo.Data;
+using Demo.Extensions;
 using Demo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -6,11 +7,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Controllers;
 
-[Authorize(Roles = "Admin")]
+[Authorize]
 [Route("meus-produtos")]
 public class ProductController(AppDbContext context) : Controller
 {
-    [Authorize(Policy = "ViewProduct")]
+    // [Authorize(Policy = "ViewProduct")]
+    [ClaimsAuthorize("Product", "View")]
     public async Task<IActionResult> Index()
     {
         var user = HttpContext.User.Identity;
@@ -18,6 +20,7 @@ public class ProductController(AppDbContext context) : Controller
     }
 
     [Route("detalhes/{id}")]
+    [ClaimsAuthorize("Product", "View")]
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null) return NotFound();
@@ -30,6 +33,7 @@ public class ProductController(AppDbContext context) : Controller
     }
     
     [Route("criar-novo")]
+    [ClaimsAuthorize("Product", "Add")]
     public IActionResult Create()
     {
         return View();
@@ -37,6 +41,7 @@ public class ProductController(AppDbContext context) : Controller
 
     [HttpPost("criar-novo")]
     [ValidateAntiForgeryToken]
+    [ClaimsAuthorize("Product", "Add")]
     public async Task<IActionResult> Create([Bind("Id,Name,Description,Image,Price")] Product product)
     {
         if (!ModelState.IsValid) return View(product);
@@ -46,6 +51,7 @@ public class ProductController(AppDbContext context) : Controller
     }
 
     [Route("editar/{id}")]
+    [ClaimsAuthorize("Product", "Edit")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -57,6 +63,7 @@ public class ProductController(AppDbContext context) : Controller
 
     [HttpPost("editar/{id}")]
     [ValidateAntiForgeryToken]
+    [ClaimsAuthorize("Product", "Edit")]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Image,Price")] Product product)
     {
         if (id != product.Id) return NotFound();
@@ -78,7 +85,8 @@ public class ProductController(AppDbContext context) : Controller
     }
     
     [Route("deletar/{id}")]
-    [Authorize(Policy = "CanPermanentlyDelete")]
+    [ClaimsAuthorize("Product", "Delete")]
+    // [Authorize(Policy = "CanPermanentlyDelete")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
@@ -92,8 +100,9 @@ public class ProductController(AppDbContext context) : Controller
 
     [HttpPost("deletar/{id}")]
     [ActionName("Delete")]
-    [Authorize(Policy = "CanPermanentlyDelete")]
     [ValidateAntiForgeryToken]
+    [ClaimsAuthorize("Product", "Delete")]
+    // [Authorize(Policy = "CanPermanentlyDelete")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var product = await context.Products.FindAsync(id);
