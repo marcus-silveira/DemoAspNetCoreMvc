@@ -1,15 +1,19 @@
 using Demo.Data;
 using Demo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Controllers;
 
+[Authorize(Roles = "Admin")]
 [Route("meus-produtos")]
 public class ProductController(AppDbContext context) : Controller
 {
+    [Authorize(Policy = "ViewProduct")]
     public async Task<IActionResult> Index()
     {
+        var user = HttpContext.User.Identity;
         return View(await context.Products.ToListAsync());
     }
 
@@ -74,6 +78,7 @@ public class ProductController(AppDbContext context) : Controller
     }
     
     [Route("deletar/{id}")]
+    [Authorize(Policy = "CanPermanentlyDelete")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
@@ -87,6 +92,7 @@ public class ProductController(AppDbContext context) : Controller
 
     [HttpPost("deletar/{id}")]
     [ActionName("Delete")]
+    [Authorize(Policy = "CanPermanentlyDelete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
