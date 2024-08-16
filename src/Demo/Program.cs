@@ -2,7 +2,9 @@ using Demo.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.AddMvcConfiguration()
+builder
+    .AddElmahConfiguration()
+    .AddMvcConfiguration()
     .AddIdentityConfiguration()
     .AddIoCConfiguration();
 

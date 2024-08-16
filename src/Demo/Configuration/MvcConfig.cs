@@ -46,6 +46,8 @@ public static class MvcConfig
             app.UseHsts();
         }
         
+        app.UseElmahIo();
+        
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();
