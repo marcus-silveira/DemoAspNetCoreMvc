@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Demo.Data;
+using Demo.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,7 @@ public static class MvcConfig
         builder.Services.AddControllersWithViews(options =>
         {
             options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            options.Filters.Add(typeof(AuditFilter));
         });
         
         // var provider = builder.Services.AddEntityFrameworkInMemoryDatabase().BuildServiceProvider();
@@ -47,6 +49,7 @@ public static class MvcConfig
         }
         
         app.UseElmahIo();
+        app.UseElmahIoExtensionsLogging();
         
         app.UseHttpsRedirection();
 

@@ -5,14 +5,20 @@ using Microsoft.Extensions.Options;
 
 namespace Demo.Controllers;
 
-public class HomeController(IConfiguration configuration, IOptions<ApiConfiguration> apiConfiguration)
+public class HomeController(IConfiguration configuration, IOptions<ApiConfiguration> apiConfiguration, ILogger<HomeController> logger)
     : Controller
 {
     private readonly ApiConfiguration _apiConfig = apiConfiguration.Value;
+    private readonly ILogger<HomeController> _logger = logger;
 
 
     public async Task<IActionResult> Index()
     {
+        _logger.LogInformation("Information");
+        _logger.LogWarning("Warning");
+        _logger.LogCritical("Critical");
+        _logger.LogError("Error");
+        
         var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
         var apiConfig = new ApiConfiguration();
