@@ -8,6 +8,10 @@
         <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"/>
         <link rel="stylesheet" href="~/css/site.css"/>
     </environment>
+    <environment include="Production">
+        <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css"/>
+        <link rel="stylesheet" href="~/css/site.css"/>
+    </environment>
 
     @* <environment exclude="Development"> *@
     @*     <link rel="stylesheet" href="~/css/site.min.css"/> *@
@@ -51,14 +55,17 @@
     </footer>
 
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery/jquery.js"></script>
         <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
-        <script src="~/js/site.js"></script>
-        <script src="~/js/cep.js"></script>
     </environment>
 
-g *@
-    @await RenderSectionAsync("Scripts", false)
+    <environment exclude="Development">
+        <script src="~/lib/jquery/jquery.js"></script>
+        <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="~/js/site.js"></script>
+    </environment>
+
+@await RenderSectionAsync("Scripts", false)
 
 </body>
 </html>
