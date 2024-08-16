@@ -13,8 +13,8 @@ public static class MvcConfig
             .SetBasePath(builder.Environment.ContentRootPath)
             .AddJsonFile("appsettings.json", true, true)
             .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
-            .AddUserSecrets(Assembly.GetExecutingAssembly(), true)
-            .AddEnvironmentVariables();
+            .AddEnvironmentVariables()
+            .AddUserSecrets(Assembly.GetExecutingAssembly(), true);
         
         builder.Services.AddControllersWithViews(options =>
         {
@@ -36,6 +36,16 @@ public static class MvcConfig
     
     public static WebApplication UseMvcConfiguration(this WebApplication app)
     {
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }else
+        {
+            app.UseExceptionHandler("/error/500");
+            app.UseStatusCodePagesWithRedirects("/error/{0}");
+            app.UseHsts();
+        }
+        
         app.UseHttpsRedirection();
 
         app.UseStaticFiles();
